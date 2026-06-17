@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6B0F1A" />
+
+  <title>Firdavs & Rukhshona — Приглашение на свадьбу · 23 июня 2026</title>
+  <meta name="description" content="Приглашаем вас на свадьбу Firdavs и Rukhshona. 23 июня 2026 года, 19:00, ресторан Fotima Sulton. Подтвердите своё участие." />
+  <meta name="author" content="Firdavs & Rukhshona" />
+
+  <!-- Open Graph / SEO -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Firdavs & Rukhshona — Приглашение на свадьбу" />
+  <meta property="og:description" content="23 июня 2026 · 19:00 · ресторан Fotima Sulton. Будем рады видеть вас!" />
+  <meta property="og:image" content="assets/images/venue.svg" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="./" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Forum&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Structured data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Свадьба Firdavs & Rukhshona",
+    "startDate": "2026-06-23T19:00:00",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": "Ресторан Fotima Sulton",
+      "address": "Fotima Sulton"
+    },
+    "description": "Приглашение на свадебное торжество Firdavs и Rukhshona."
+  }
+  </script>
+</head>
+
+<body>
+  <!-- ============ PRELOADER ============ -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__ring"></div>
+    <div class="preloader__monogram">F &amp; R</div>
+  </div>
+
+  <!-- ============ MUSIC TOGGLE ============ -->
+  <button class="music-toggle" id="musicToggle" aria-label="Включить или выключить музыку" title="Музыка">
+    <span class="music-toggle__bars" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </span>
+  </button>
+
+  <!-- ============ SCROLL PROGRESS ============ -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="hero">
+    <canvas class="hero__particles" id="particles" aria-hidden="true"></canvas>
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="hero__pretitle reveal" data-reveal="fade">С радостью приглашаем на нашу свадьбу</p>
+
+      <h1 class="hero__names">
+        <span class="hero__name reveal" data-reveal="up" data-delay="120" id="groomName">Firdavs</span>
+        <span class="hero__amp reveal" data-reveal="scale" data-delay="260">&amp;</span>
+        <span class="hero__name reveal" data-reveal="up" data-delay="400" id="brideName">Rukhshona</span>
+      </h1>
+
+      <div class="hero__divider reveal" data-reveal="scale" data-delay="540" aria-hidden="true">
+        <span class="line"></span>
+        <span class="diamond"></span>
+        <span class="line"></span>
+      </div>
+
+      <p class="hero__subtitle reveal" data-reveal="up" data-delay="640">Wedding Day</p>
+      <p class="hero__date reveal" data-reveal="up" data-delay="760" id="heroDate">23 June 2026</p>
+    </div>
+
+    <a class="scroll-indicator" href="#greeting" aria-label="Прокрутить вниз">
+      <span class="scroll-indicator__text">Листайте вниз</span>
+      <span class="scroll-indicator__mouse" aria-hidden="true"><span class="wheel"></span></span>
+    </a>
+  </header>
+
+  <main>
+    <!-- ============ GREETING ============ -->
+    <section class="section greeting" id="greeting">
+      <div class="container container--narrow">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Дорогие родные и друзья!</h2>
+        <p class="greeting__text reveal" data-reveal="up" data-delay="120">
+          С огромной радостью приглашаем вас разделить вместе с нами один из самых
+          счастливых дней нашей жизни. Ваше присутствие сделает этот праздник
+          по-настоящему особенным.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ COUNTDOWN ============ -->
+    <section class="section countdown-section" id="countdown">
+      <div class="container">
+        <p class="section__eyebrow reveal" data-reveal="up">До торжества осталось</p>
+        <div class="countdown reveal" data-reveal="up" data-delay="120" id="countdown" aria-live="polite">
+          <div class="countdown__item">
+            <span class="countdown__num" id="cdDays">00</span>
+            <span class="countdown__label">дней</span>
+          </div>
+          <span class="countdown__sep" aria-hidden="true">:</span>
+          <div class="countdown__item">
+            <span class="countdown__num" id="cdHours">00</span>
+            <span class="countdown__label">часов</span>
+          </div>
+          <span class="countdown__sep" aria-hidden="true">:</span>
+          <div class="countdown__item">
+            <span class="countdown__num" id="cdMinutes">00</span>
+            <span class="countdown__label">минут</span>
+          </div>
+          <span class="countdown__sep" aria-hidden="true">:</span>
+          <div class="countdown__item">
+            <span class="countdown__num" id="cdSeconds">00</span>
+            <span class="countdown__label">секунд</span>
+          </div>
+        </div>
+        <p class="countdown__finished" id="countdownFinished" hidden>Сегодня наш день! Спасибо, что вы с нами &#10084;</p>
+      </div>
+    </section>
+
+    <!-- ============ PROGRAM / TIMELINE ============ -->
+    <section class="section program" id="program">
+      <div class="container">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Программа вечера</h2>
+        <ul class="timeline" id="timeline"><!-- injected by JS --></ul>
+      </div>
+    </section>
+
+    <!-- ============ VENUE ============ -->
+    <section class="section venue" id="venue">
+      <div class="container">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Место проведения</h2>
+        <p class="venue__name reveal" data-reveal="up" data-delay="100" id="venueName">Fotima Sulton</p>
+        <p class="venue__meta reveal" data-reveal="up" data-delay="160" id="venueMeta">23 июня 2026 · 19:00</p>
+
+        <div class="venue__grid">
+          <figure class="venue__photo reveal" data-reveal="left">
+            <img src="assets/images/venue.svg" alt="Ресторан Fotima Sulton" loading="lazy" width="1200" height="800" />
+            <figcaption>Ресторан «Fotima Sulton»</figcaption>
+          </figure>
+
+          <div class="venue__map reveal" data-reveal="right">
+            <div class="venue__map-frame" id="mapFrame"><!-- map injected by JS --></div>
+            <a class="btn btn--gold venue__route" id="routeBtn" href="#" target="_blank" rel="noopener">
+              <span class="btn__icon" aria-hidden="true">&#9906;</span> Построить маршрут
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DRESS CODE ============ -->
+    <section class="section dresscode" id="dresscode">
+      <div class="container container--narrow">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Dress Code</h2>
+        <p class="dresscode__text reveal" data-reveal="up" data-delay="100">
+          Будем рады видеть вас в элегантных праздничных нарядах.
+        </p>
+        <ul class="palette reveal" data-reveal="up" data-delay="180" id="palette"><!-- injected by JS --></ul>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="section gallery" id="gallery">
+      <div class="container">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Наша история в фотографиях</h2>
+        <div class="gallery__grid" id="galleryGrid"><!-- injected by JS --></div>
+      </div>
+    </section>
+
+    <!-- ============ WISHES ============ -->
+    <section class="section wishes" id="wishes">
+      <div class="container container--narrow">
+        <span class="ornament ornament--light reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <blockquote class="wishes__quote reveal" data-reveal="up">
+          Ваше присутствие станет для нас самым ценным подарком.
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ============ RSVP ============ -->
+    <section class="section rsvp" id="rsvp">
+      <div class="container container--narrow">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Подтверждение участия</h2>
+        <p class="rsvp__lead reveal" data-reveal="up" data-delay="100">
+          Пожалуйста, подтвердите своё присутствие до 1 июня 2026 года.
+        </p>
+
+        <form class="rsvp__form reveal" data-reveal="up" data-delay="160" id="rsvpForm" novalidate>
+          <div class="field">
+            <label for="guestName">Имя и фамилия</label>
+            <input type="text" id="guestName" name="name" placeholder="Ваше имя" required autocomplete="name" />
+            <small class="field__error" data-error-for="guestName"></small>
+          </div>
+
+          <div class="field">
+            <label for="guestPhone">Телефон</label>
+            <input type="tel" id="guestPhone" name="phone" placeholder="+998 __ ___ __ __" required autocomplete="tel" />
+            <small class="field__error" data-error-for="guestPhone"></small>
+          </div>
+
+          <fieldset class="field field--choice">
+            <legend>Будете присутствовать?</legend>
+            <div class="choice">
+              <label class="choice__option">
+                <input type="radio" name="attendance" value="yes" required />
+                <span class="choice__box">Да, обязательно буду</span>
+              </label>
+              <label class="choice__option">
+                <input type="radio" name="attendance" value="no" />
+                <span class="choice__box">К сожалению, не смогу</span>
+              </label>
+            </div>
+            <small class="field__error" data-error-for="attendance"></small>
+          </fieldset>
+
+          <div class="field" id="guestsField">
+            <label for="guestCount">Количество гостей</label>
+            <select id="guestCount" name="guests">
+              <option value="1">1 человек</option>
+              <option value="2">2 человека</option>
+              <option value="3">3 человека</option>
+              <option value="4">4 человека</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn--gold rsvp__submit">Подтвердить участие</button>
+          <p class="rsvp__success" id="rsvpSuccess" hidden>Спасибо! Ваш ответ принят. Будем рады встрече &#10084;</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__monogram">F &amp; R</div>
+    <p class="footer__names" id="footerNames">Firdavs &amp; Rukhshona</p>
+    <p class="footer__date">23 июня 2026 · Fotima Sulton</p>
+    <p class="footer__credit">С любовью ждём вас на нашем празднике</p>
+  </footer>
+
+  <!-- audio element added dynamically only if src is configured -->
+  <script src="js/script.js" defer></script>
+</body>
+</html>

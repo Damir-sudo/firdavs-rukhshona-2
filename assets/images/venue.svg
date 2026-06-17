@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7a1320"/>
+      <stop offset="100%" stop-color="#4a0a12"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#f6e7a8"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#vg)"/>
+  <g opacity="0.92">
+    <rect x="300" y="320" width="600" height="360" fill="#3a070d" stroke="url(#gold)" stroke-width="3"/>
+    <polygon points="270,320 600,150 930,320" fill="#5a0d17" stroke="url(#gold)" stroke-width="3"/>
+    <rect x="560" y="470" width="80" height="210" fill="url(#gold)" opacity="0.85"/>
+    <rect x="380" y="400" width="90" height="120" fill="#2c0509" stroke="url(#gold)" stroke-width="2"/>
+    <rect x="730" y="400" width="90" height="120" fill="#2c0509" stroke="url(#gold)" stroke-width="2"/>
+    <circle cx="600" cy="240" r="26" fill="url(#gold)"/>
+  </g>
+  <text x="600" y="745" font-family="Georgia, serif" font-size="38" fill="url(#gold)" text-anchor="middle" letter-spacing="6">FOTIMA SULTON</text>
+</svg>
