@@ -115,25 +115,39 @@ ul { list-style: none; }
    MUSIC TOGGLE
    ===================================================================== */
 .music-toggle {
-  position: fixed; top: 22px; right: 22px; z-index: 1000;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(107, 15, 26, 0.55);
+  position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px 12px 16px; border-radius: 50px;
+  background: rgba(74, 10, 18, 0.7);
   border: 1px solid rgba(212, 175, 55, 0.6);
-  backdrop-filter: blur(6px);
-  display: grid; place-items: center;
-  transition: transform 0.3s var(--ease), background 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(8px);
+  color: var(--gold-light);
+  cursor: pointer;
+  transition: transform 0.3s var(--ease), background 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
-.music-toggle:hover { transform: scale(1.08); box-shadow: var(--shadow-gold); }
-.music-toggle__bars { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
-.music-toggle__bars span {
-  width: 3px; height: 100%; background: var(--gold-light); border-radius: 2px;
-  transform-origin: bottom; transform: scaleY(0.4);
+.music-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-gold);
+  background: rgba(74, 10, 18, 0.85);
+  border-color: var(--gold);
 }
-.music-toggle.is-playing .music-toggle__bars span { animation: equalize 1s ease-in-out infinite; }
-.music-toggle.is-playing .music-toggle__bars span:nth-child(2) { animation-delay: 0.2s; }
-.music-toggle.is-playing .music-toggle__bars span:nth-child(3) { animation-delay: 0.4s; }
-.music-toggle.is-playing .music-toggle__bars span:nth-child(4) { animation-delay: 0.15s; }
-@keyframes equalize { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+.music-toggle__icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  opacity: 0.8; transition: opacity 0.3s;
+}
+.music-toggle.is-playing .music-toggle__icon { opacity: 1; animation: pulse-glow 2s ease-in-out infinite; }
+.music-toggle__label {
+  font-family: var(--sans); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+}
+.music-toggle.is-playing { border-color: var(--gold); background: rgba(107, 15, 26, 0.8); }
+.music-toggle.is-playing .music-toggle__label { color: var(--gold); }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px rgba(212,175,55,0.4)); }
+  50% { opacity: 0.75; filter: drop-shadow(0 0 8px rgba(212,175,55,0.7)); }
+}
 
 /* =====================================================================
    SCROLL PROGRESS

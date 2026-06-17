@@ -28,10 +28,11 @@ const WEDDING_CONFIG = {
     ],
   },
 
-  // Background music. Drop wedding-song.mp3 into assets/music/ to enable.
+  // Background music — Italian Jazz / Romantic ambient loop.
+  // File: assets/music/romantic-jazz.wav (auto-plays on user gesture).
   music: {
-    src: "assets/music/wedding-song.mp3",
-    volume: 0.5,
+    src: "assets/music/romantic-jazz.wav",
+    volume: 0.45,
   },
 
   // Evening programme (timeline).
@@ -298,38 +299,33 @@ function initParticles() {
 function initMusic() {
   const btn = $("#musicToggle");
   if (!btn) return;
+  const label = btn.querySelector(".music-toggle__label");
 
   const audio = new Audio();
   audio.src = WEDDING_CONFIG.music.src;
   audio.loop = true;
-  audio.preload = "none";
+  audio.preload = "auto";
   audio.volume = WEDDING_CONFIG.music.volume;
 
   let playing = false;
-  let triedAutoplay = false;
+
+  const setLabel = (on) => { if (label) label.textContent = on ? "Music On" : "Music Off"; };
 
   const play = () => {
     audio.play().then(() => {
       playing = true;
       btn.classList.add("is-playing");
+      setLabel(true);
     }).catch(() => { /* blocked until user gesture */ });
   };
   const pause = () => {
     audio.pause();
     playing = false;
     btn.classList.remove("is-playing");
+    setLabel(false);
   };
 
   btn.addEventListener("click", () => (playing ? pause() : play()));
-
-  // Try to start on the first user interaction (browsers block autoplay).
-  const startOnGesture = () => {
-    if (!triedAutoplay && !playing) { triedAutoplay = true; play(); }
-    window.removeEventListener("pointerdown", startOnGesture);
-    window.removeEventListener("keydown", startOnGesture);
-  };
-  window.addEventListener("pointerdown", startOnGesture, { once: true });
-  window.addEventListener("keydown", startOnGesture, { once: true });
 }
 
 /* ---------------------------------------------------------------------
