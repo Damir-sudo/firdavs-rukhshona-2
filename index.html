@@ -133,6 +133,18 @@
       </div>
     </section>
 
+    <!-- ============ OUR STORY ============ -->
+    <section class="section story" id="story">
+      <div class="container">
+        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
+        <h2 class="section__title reveal" data-reveal="up">Наша история</h2>
+        <p class="story__lead reveal" data-reveal="up" data-delay="100">
+          Путь, который привёл нас к этому дню
+        </p>
+        <ul class="story__timeline" id="storyTimeline"><!-- injected by JS --></ul>
+      </div>
+    </section>
+
     <!-- ============ PROGRAM / TIMELINE ============ -->
     <section class="section program" id="program">
       <div class="container">
@@ -150,31 +162,15 @@
         <p class="venue__name reveal" data-reveal="up" data-delay="100" id="venueName">Fotima Sulton</p>
         <p class="venue__meta reveal" data-reveal="up" data-delay="160" id="venueMeta">23 июня 2026 · 19:00</p>
 
-        <div class="venue__grid">
-          <figure class="venue__photo reveal" data-reveal="left">
-            <img src="assets/images/venue.svg" alt="Ресторан Fotima Sulton" loading="lazy" width="1200" height="800" />
-            <figcaption>Ресторан «Fotima Sulton»</figcaption>
-          </figure>
+        <!-- restaurant photos (injected by JS from config) -->
+        <div class="venue__photos" id="venuePhotos"><!-- injected by JS --></div>
 
-          <div class="venue__map reveal" data-reveal="right">
-            <div class="venue__map-frame" id="mapFrame"><!-- map injected by JS --></div>
-            <a class="btn btn--gold venue__route" id="routeBtn" href="#" target="_blank" rel="noopener">
-              <span class="btn__icon" aria-hidden="true">&#9906;</span> Построить маршрут
-            </a>
-          </div>
+        <div class="venue__map reveal" data-reveal="up">
+          <div class="venue__map-frame" id="mapFrame"><!-- map injected by JS --></div>
+          <a class="btn btn--gold venue__route" id="routeBtn" href="#" target="_blank" rel="noopener">
+            <span class="btn__icon" aria-hidden="true">&#9906;</span> Построить маршрут
+          </a>
         </div>
-      </div>
-    </section>
-
-    <!-- ============ DRESS CODE ============ -->
-    <section class="section dresscode" id="dresscode">
-      <div class="container container--narrow">
-        <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
-        <h2 class="section__title reveal" data-reveal="up">Dress Code</h2>
-        <p class="dresscode__text reveal" data-reveal="up" data-delay="100">
-          Будем рады видеть вас в элегантных праздничных нарядах.
-        </p>
-        <ul class="palette reveal" data-reveal="up" data-delay="180" id="palette"><!-- injected by JS --></ul>
       </div>
     </section>
 
@@ -182,7 +178,7 @@
     <section class="section gallery" id="gallery">
       <div class="container">
         <span class="ornament reveal" data-reveal="scale" aria-hidden="true">&#10086;</span>
-        <h2 class="section__title reveal" data-reveal="up">Наша история в фотографиях</h2>
+        <h2 class="section__title reveal" data-reveal="up">Счастливые моменты</h2>
         <div class="gallery__grid" id="galleryGrid"><!-- injected by JS --></div>
       </div>
     </section>

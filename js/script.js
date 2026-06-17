@@ -13,12 +13,31 @@ const WEDDING_CONFIG = {
   dateLabelRu: "23 июня 2026",
   timeLabel: "19:00",
 
+  // ---- HERO ----
+  // Drop your full-screen photo at assets/images/hero.jpg
+  // (or change the path). If the file is missing, an elegant
+  // animated fallback is shown automatically.
+  hero: {
+    image: "assets/images/hero.jpg",
+    fallback: "assets/images/hero.svg",
+  },
+
+  // ---- VENUE ----
   venue: {
     name: "Fotima Sulton",
-    // Used for the embedded map and the "Build route" button.
+    // Used for the map + "Build route" button when no direct link is set.
     query: "Fotima Sulton restaurant",
-    // Optional: set exact coordinates "latitude,longitude" for precise pin.
-    coords: "",
+    coords: "", // optional "latitude,longitude" for a precise pin
+    // Paste your Google/Yandex Maps share link here. When set, it is used
+    // for the "Build route" button and the embedded map.
+    locationUrl: "",
+    // Restaurant photos. Upload real images with these names; SVG
+    // placeholders are used until the real photos are added.
+    photos: [
+      { src: "assets/images/restaurant-1.jpg", fallback: "assets/images/restaurant-1.svg", caption: "Главный зал" },
+      { src: "assets/images/restaurant-2.jpg", fallback: "assets/images/restaurant-2.svg", caption: "Банкетный зал" },
+      { src: "assets/images/restaurant-3.jpg", fallback: "assets/images/restaurant-3.svg", caption: "Терраса" },
+    ],
   },
 
   // Background music. Drop a file at this path to enable the player.
@@ -35,12 +54,14 @@ const WEDDING_CONFIG = {
     { time: "21:00", title: "Развлекательная программа" },
   ],
 
-  // Dress code palette.
-  palette: [
-    { name: "Бордовый", color: "#6B0F1A" },
-    { name: "Кремовый", color: "#FBF6EC" },
-    { name: "Бежевый", color: "#D9C7A3" },
-    { name: "Золотой", color: "#D4AF37" },
+  // ---- OUR STORY ----
+  // Add as many moments as you like. Upload photos as story-1.jpg, etc.
+  story: [
+    { date: "2021", title: "Знакомство", text: "Однажды наши пути пересеклись — и с этого момента всё изменилось.", src: "assets/images/story-1.jpg", fallback: "assets/images/story-1.svg" },
+    { date: "2022", title: "Первое свидание", text: "Первая прогулка, первый разговор до утра и понимание, что это — навсегда.", src: "assets/images/story-2.jpg", fallback: "assets/images/story-2.svg" },
+    { date: "2024", title: "Предложение", text: "Сердце замерло, прозвучало «да», и мир наполнился счастьем.", src: "assets/images/story-3.jpg", fallback: "assets/images/story-3.svg" },
+    { date: "2025", title: "Помолвка", text: "Мы соединили наши семьи и сделали первый шаг к новой жизни вместе.", src: "assets/images/story-4.jpg", fallback: "assets/images/story-4.svg" },
+    { date: "2026", title: "Наш день", text: "И вот настал день, которого мы так ждали. Будем счастливы разделить его с вами.", src: "assets/images/story-5.jpg", fallback: "assets/images/story-5.svg" },
   ],
 
   // Gallery images. Replace with real photos when available.
@@ -60,6 +81,13 @@ const WEDDING_CONFIG = {
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 const pad = (n) => String(n).padStart(2, "0");
+
+// Build an <img> markup string with a graceful fallback. If the primary
+// photo is missing, the browser swaps to the placeholder automatically.
+function imgTag(src, fallback, alt, extraAttr = "") {
+  const fb = fallback ? ` onerror="this.onerror=null;this.src='${fallback}';this.classList.add('is-placeholder')"` : "";
+  return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${fb} ${extraAttr}>`;
+}
 
 /* ---------------------------------------------------------------------
    Populate text content from config
@@ -81,7 +109,23 @@ function hydrateContent() {
 }
 
 /* ---------------------------------------------------------------------
-   Build dynamic sections (timeline, palette, gallery, map)
+   Hero background photo (with elegant fallback)
+   --------------------------------------------------------------------- */
+function initHeroBackground() {
+  const hero = $("#hero");
+  if (!hero) return;
+  const { image, fallback } = WEDDING_CONFIG.hero;
+
+  const apply = (url) => { hero.style.setProperty("--hero-image", `url("${url}")`); hero.classList.add("has-photo"); };
+
+  const probe = new Image();
+  probe.onload = () => apply(image);
+  probe.onerror = () => { if (fallback) apply(fallback); };
+  probe.src = image;
+}
+
+/* ---------------------------------------------------------------------
+   Build dynamic sections (program, story, venue photos, gallery, map)
    --------------------------------------------------------------------- */
 function buildTimeline() {
   const list = $("#timeline");
@@ -96,14 +140,36 @@ function buildTimeline() {
     </li>`).join("");
 }
 
-function buildPalette() {
-  const list = $("#palette");
+function buildStory() {
+  const list = $("#storyTimeline");
   if (!list) return;
-  list.innerHTML = WEDDING_CONFIG.palette.map((p) => `
-    <li class="palette__item">
-      <span class="palette__swatch" style="background:${p.color}"></span>
-      <span class="palette__name">${p.name}</span>
-    </li>`).join("");
+  list.innerHTML = WEDDING_CONFIG.story.map((s, i) => {
+    const side = i % 2 === 0 ? "left" : "right";
+    const alt = `${s.title} — ${WEDDING_CONFIG.groom} и ${WEDDING_CONFIG.bride}`;
+    return `
+    <li class="story__item story__item--${side} reveal" data-reveal="${side === "left" ? "left" : "right"}" data-delay="60">
+      <div class="story__media">
+        <figure class="story__photo">${imgTag(s.src, s.fallback, alt)}</figure>
+      </div>
+      <span class="story__node" aria-hidden="true"></span>
+      <div class="story__content">
+        ${s.date ? `<span class="story__date">${s.date}</span>` : ""}
+        <h3 class="story__heading">${s.title}</h3>
+        <p class="story__text">${s.text}</p>
+      </div>
+    </li>`;
+  }).join("");
+}
+
+function buildVenuePhotos() {
+  const wrap = $("#venuePhotos");
+  if (!wrap) return;
+  const photos = WEDDING_CONFIG.venue.photos || [];
+  wrap.innerHTML = photos.map((p, i) => `
+    <figure class="venue__photo reveal" data-reveal="up" data-delay="${i * 90}" data-index="${i}">
+      ${imgTag(p.src, p.fallback, `${WEDDING_CONFIG.venue.name} — ${p.caption || ""}`)}
+      ${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}
+    </figure>`).join("");
 }
 
 function buildGallery() {
@@ -111,18 +177,20 @@ function buildGallery() {
   if (!grid) return;
   grid.innerHTML = WEDDING_CONFIG.gallery.map((src, i) => `
     <figure class="gallery__cell reveal" data-reveal="up" data-delay="${(i % 3) * 90}" data-index="${i}">
-      <img src="${src}" alt="Фотография ${i + 1} — ${WEDDING_CONFIG.groom} и ${WEDDING_CONFIG.bride}" loading="lazy" />
+      <img src="${src}" alt="Фотография ${i + 1} — ${WEDDING_CONFIG.groom} и ${WEDDING_CONFIG.bride}" loading="lazy" decoding="async" />
     </figure>`).join("");
 }
 
 function buildMap() {
   const frame = $("#mapFrame");
   const routeBtn = $("#routeBtn");
-  const { query, coords } = WEDDING_CONFIG.venue;
+  const { query, coords, locationUrl } = WEDDING_CONFIG.venue;
   const q = encodeURIComponent(coords || query);
 
   if (frame) {
     const iframe = document.createElement("iframe");
+    // A direct share link can't be reliably embedded, so the embedded map
+    // always uses the place query; the route button uses the exact link.
     iframe.src = `https://maps.google.com/maps?q=${q}&z=15&output=embed`;
     iframe.loading = "lazy";
     iframe.referrerPolicy = "no-referrer-when-downgrade";
@@ -130,7 +198,9 @@ function buildMap() {
     frame.appendChild(iframe);
   }
   if (routeBtn) {
-    routeBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+    routeBtn.href = locationUrl
+      ? locationUrl
+      : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
   }
 }
 
@@ -441,8 +511,10 @@ function initPreloader() {
    --------------------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   hydrateContent();
+  initHeroBackground();
   buildTimeline();
-  buildPalette();
+  buildStory();
+  buildVenuePhotos();
   buildGallery();
   buildMap();
 
