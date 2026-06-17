@@ -14,11 +14,11 @@ const WEDDING_CONFIG = {
   timeLabel: "19:00",
 
   // ---- HERO ----
-  // Drop your full-screen photo at assets/images/hero.jpg
-  // (or change the path). If the file is missing, an elegant
-  // animated fallback is shown automatically.
+  // Drop your photo at assets/images/hero-photo.jpg via GitHub.
+  // If the file is missing, an elegant animated fallback is shown.
+  // Once uploaded, the photo appears automatically — no code changes needed.
   hero: {
-    image: "assets/images/hero.jpg",
+    image: "assets/images/hero-photo.jpg",
     fallback: "assets/images/hero.svg",
   },
 
@@ -28,15 +28,11 @@ const WEDDING_CONFIG = {
     // Used for the map + "Build route" button when no direct link is set.
     query: "Fotima Sulton restaurant",
     coords: "", // optional "latitude,longitude" for a precise pin
-    // Paste your Google/Yandex Maps share link here. When set, it is used
-    // for the "Build route" button and the embedded map.
-    locationUrl: "",
-    // Restaurant photos. Upload real images with these names; SVG
-    // placeholders are used until the real photos are added.
+    // Location URL is loaded from js/config.js (variable: locationUrl).
+    // Restaurant photo. Upload as assets/images/restaurant.jpg via GitHub.
+    // If missing, a beautiful SVG placeholder is shown automatically.
     photos: [
-      { src: "assets/images/restaurant-1.jpg", fallback: "assets/images/restaurant-1.svg", caption: "Главный зал" },
-      { src: "assets/images/restaurant-2.jpg", fallback: "assets/images/restaurant-2.svg", caption: "Банкетный зал" },
-      { src: "assets/images/restaurant-3.jpg", fallback: "assets/images/restaurant-3.svg", caption: "Терраса" },
+      { src: "assets/images/restaurant.jpg", fallback: "assets/images/restaurant.svg", caption: "Ресторан Fotima Sulton" },
     ],
   },
 
@@ -184,13 +180,14 @@ function buildGallery() {
 function buildMap() {
   const frame = $("#mapFrame");
   const routeBtn = $("#routeBtn");
-  const { query, coords, locationUrl } = WEDDING_CONFIG.venue;
+  const { query, coords } = WEDDING_CONFIG.venue;
   const q = encodeURIComponent(coords || query);
+
+  // locationUrl comes from js/config.js (loaded before this script).
+  const configuredUrl = (typeof locationUrl !== "undefined" && locationUrl) ? locationUrl : "";
 
   if (frame) {
     const iframe = document.createElement("iframe");
-    // A direct share link can't be reliably embedded, so the embedded map
-    // always uses the place query; the route button uses the exact link.
     iframe.src = `https://maps.google.com/maps?q=${q}&z=15&output=embed`;
     iframe.loading = "lazy";
     iframe.referrerPolicy = "no-referrer-when-downgrade";
@@ -198,8 +195,8 @@ function buildMap() {
     frame.appendChild(iframe);
   }
   if (routeBtn) {
-    routeBtn.href = locationUrl
-      ? locationUrl
+    routeBtn.href = configuredUrl
+      ? configuredUrl
       : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
   }
 }
