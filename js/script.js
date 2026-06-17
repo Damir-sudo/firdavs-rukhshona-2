@@ -14,17 +14,14 @@ const WEDDING_CONFIG = {
   timeLabel: "19:00",
 
   // ---- HERO ----
-  // Photo is loaded directly as the hero background.
-  hero: {
-    image: "assets/images/hero-photo.jpg",
-  },
+  // Photo path is set directly in CSS (css/style.css → .hero background).
+  // To change the hero photo, replace assets/images/hero-photo.jpg.
 
   // ---- VENUE ----
   venue: {
     name: "Fotima Sulton",
-    // Used for the map + "Build route" button when no direct link is set.
-    query: "Fotima Sulton restaurant",
-    coords: "", // optional "latitude,longitude" for a precise pin
+    // Used for the map search if locationUrl (in config.js) is empty.
+    query: "Fotima Sulton restaurant Samarkand",
     // Location URL is loaded from js/config.js (variable: locationUrl).
     photos: [
       { src: "assets/images/restaurant.jpg", caption: "Ресторан Fotima Sulton" },
@@ -53,15 +50,6 @@ const WEDDING_CONFIG = {
     { date: "2024", title: "Предложение", text: "Сердце замерло, прозвучало «да», и мир наполнился счастьем.", src: "assets/images/story-3.jpg" },
   ],
 
-  // Gallery images. Replace with real photos when available.
-  gallery: [
-    "assets/images/gallery-1.svg",
-    "assets/images/gallery-2.svg",
-    "assets/images/gallery-3.svg",
-    "assets/images/gallery-4.svg",
-    "assets/images/gallery-5.svg",
-    "assets/images/gallery-6.svg",
-  ],
 };
 
 /* ---------------------------------------------------------------------
@@ -91,20 +79,7 @@ function hydrateContent() {
 }
 
 /* ---------------------------------------------------------------------
-   Hero background photo
-   --------------------------------------------------------------------- */
-function initHeroBackground() {
-  const hero = $("#hero");
-  if (!hero) return;
-  const { image } = WEDDING_CONFIG.hero;
-
-  // Apply the uploaded photo directly as the hero background.
-  hero.style.setProperty("--hero-image", `url("${image}")`);
-  hero.classList.add("has-photo");
-}
-
-/* ---------------------------------------------------------------------
-   Build dynamic sections (program, story, venue photos, gallery, map)
+   Build dynamic sections (program, story, venue photos, map)
    --------------------------------------------------------------------- */
 function buildTimeline() {
   const list = $("#timeline");
@@ -153,36 +128,28 @@ function buildVenuePhotos() {
     </figure>`).join("");
 }
 
-function buildGallery() {
-  const grid = $("#galleryGrid");
-  if (!grid) return;
-  grid.innerHTML = WEDDING_CONFIG.gallery.map((src, i) => `
-    <figure class="gallery__cell reveal" data-reveal="up" data-delay="${(i % 3) * 90}" data-index="${i}">
-      <img src="${src}" alt="Фотография ${i + 1} — ${WEDDING_CONFIG.groom} и ${WEDDING_CONFIG.bride}" loading="lazy" decoding="async" />
-    </figure>`).join("");
-}
-
 function buildMap() {
   const frame = $("#mapFrame");
   const routeBtn = $("#routeBtn");
-  const { query, coords } = WEDDING_CONFIG.venue;
-  const q = encodeURIComponent(coords || query);
+  const { query } = WEDDING_CONFIG.venue;
 
   // locationUrl comes from js/config.js (loaded before this script).
   const configuredUrl = (typeof locationUrl !== "undefined" && locationUrl) ? locationUrl : "";
 
   if (frame) {
     const iframe = document.createElement("iframe");
-    iframe.src = `https://maps.google.com/maps?q=${q}&z=15&output=embed`;
+    // Use Yandex Maps static embed with restaurant coordinates.
+    iframe.src = "https://yandex.uz/map-widget/v1/?ll=66.967199%2C39.664909&z=16&pt=66.967199,39.664909,pm2rdm";
     iframe.loading = "lazy";
     iframe.referrerPolicy = "no-referrer-when-downgrade";
     iframe.title = `Карта: ${WEDDING_CONFIG.venue.name}`;
+    iframe.setAttribute("allowfullscreen", "true");
     frame.appendChild(iframe);
   }
   if (routeBtn) {
     routeBtn.href = configuredUrl
       ? configuredUrl
-      : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
   }
 }
 
@@ -371,50 +338,6 @@ function initMusic() {
 }
 
 /* ---------------------------------------------------------------------
-   Gallery lightbox
-   --------------------------------------------------------------------- */
-function initLightbox() {
-  const cells = $$(".gallery__cell");
-  if (!cells.length) return;
-  const images = WEDDING_CONFIG.gallery;
-  let current = 0;
-
-  const box = document.createElement("div");
-  box.className = "lightbox";
-  box.setAttribute("role", "dialog");
-  box.setAttribute("aria-modal", "true");
-  box.innerHTML = `
-    <button class="lightbox__btn lightbox__close" aria-label="Закрыть">&times;</button>
-    <button class="lightbox__btn lightbox__prev" aria-label="Предыдущее фото">&#8249;</button>
-    <img class="lightbox__img" alt="Фотография" />
-    <button class="lightbox__btn lightbox__next" aria-label="Следующее фото">&#8250;</button>`;
-  document.body.appendChild(box);
-
-  const imgEl = $(".lightbox__img", box);
-  const show = (i) => {
-    current = (i + images.length) % images.length;
-    imgEl.src = images[current];
-    imgEl.alt = `Фотография ${current + 1}`;
-  };
-  const open = (i) => { show(i); box.classList.add("is-open"); document.body.style.overflow = "hidden"; };
-  const close = () => { box.classList.remove("is-open"); document.body.style.overflow = ""; };
-
-  cells.forEach((cell) => {
-    cell.addEventListener("click", () => open(parseInt(cell.dataset.index || "0", 10)));
-  });
-  $(".lightbox__close", box).addEventListener("click", close);
-  $(".lightbox__next", box).addEventListener("click", () => show(current + 1));
-  $(".lightbox__prev", box).addEventListener("click", () => show(current - 1));
-  box.addEventListener("click", (e) => { if (e.target === box) close(); });
-  document.addEventListener("keydown", (e) => {
-    if (!box.classList.contains("is-open")) return;
-    if (e.key === "Escape") close();
-    if (e.key === "ArrowRight") show(current + 1);
-    if (e.key === "ArrowLeft") show(current - 1);
-  });
-}
-
-/* ---------------------------------------------------------------------
    RSVP form
    --------------------------------------------------------------------- */
 function initRsvp() {
@@ -493,18 +416,15 @@ function initPreloader() {
    --------------------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   hydrateContent();
-  initHeroBackground();
   buildTimeline();
   buildStory();
   buildVenuePhotos();
-  buildGallery();
   buildMap();
 
   initCountdown();
   initParticles();
   initScrollFx();
   initMusic();
-  initLightbox();
   initRsvp();
   initPreloader();
 

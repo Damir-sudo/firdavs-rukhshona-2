@@ -152,45 +152,28 @@ ul { list-style: none; }
   display: grid; place-items: center; text-align: center;
   color: var(--cream);
   overflow: hidden;
-  --hero-image: none;
-  background:
-    radial-gradient(120% 90% at 50% 0%, var(--burgundy-soft) 0%, var(--burgundy) 45%, var(--burgundy-deep) 100%);
+  background: url("../assets/images/hero-photo.jpg") center / cover no-repeat;
 }
-/* Full-screen photo background (set via JS once the image loads). */
-.hero.has-photo {
-  background-image:
-    linear-gradient(rgba(42, 5, 9, 0.40), rgba(30, 3, 7, 0.50)),
-    var(--hero-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* Dark overlay for text readability (45%) — applied via ::after */
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: rgba(30, 3, 7, 0.45);
 }
 .hero::before {
-  content: ""; position: absolute; inset: 0;
+  content: ""; position: absolute; inset: 0; z-index: 1;
   background:
-    radial-gradient(circle at 18% 22%, rgba(212,175,55,0.16), transparent 38%),
-    radial-gradient(circle at 82% 78%, rgba(212,175,55,0.12), transparent 40%);
-  animation: heroGlow 12s ease-in-out infinite alternate;
+    radial-gradient(circle at 18% 22%, rgba(212,175,55,0.12), transparent 38%),
+    radial-gradient(circle at 82% 78%, rgba(212,175,55,0.10), transparent 40%);
+  pointer-events: none;
 }
-/* Extra readability scrim that strengthens when a photo is present. */
-.hero.has-photo::before {
-  background:
-    radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 30%, rgba(30,3,7,0.35) 100%),
-    radial-gradient(circle at 18% 22%, rgba(212,175,55,0.10), transparent 40%);
-  animation: none;
-}
-@keyframes heroGlow {
-  0% { transform: scale(1); opacity: 0.85; }
-  100% { transform: scale(1.15); opacity: 1; }
-}
-.hero__particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.hero__particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
 .hero__overlay {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
   border: 1px solid rgba(212, 175, 55, 0.28);
   margin: 18px; border-radius: 4px;
   box-shadow: inset 0 0 120px rgba(0,0,0,0.35);
 }
-.hero__content { position: relative; z-index: 3; padding: 0 24px; }
+.hero__content { position: relative; z-index: 4; padding: 0 24px; }
 
 .hero__pretitle {
   font-family: var(--sans);
@@ -238,7 +221,7 @@ ul { list-style: none; }
 /* scroll indicator */
 .scroll-indicator {
   position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
-  z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 10px;
   color: var(--gold-light);
   animation: floatY 2.4s ease-in-out infinite;
 }
@@ -435,50 +418,6 @@ ul { list-style: none; }
 .story__text { color: var(--ink-soft); font-size: 1rem; line-height: 1.75; }
 
 /* =====================================================================
-   GALLERY
-   ===================================================================== */
-.gallery { background: var(--cream); text-align: center; }
-.gallery__grid {
-  margin-top: 48px; display: grid; gap: 16px;
-  grid-template-columns: repeat(3, 1fr);
-}
-.gallery__cell {
-  position: relative; overflow: hidden; border-radius: 12px; cursor: pointer;
-  aspect-ratio: 4 / 5; box-shadow: var(--shadow-soft); background: var(--cream-2);
-}
-.gallery__cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
-.gallery__cell::after {
-  content: "\002B"; position: absolute; inset: 0; display: grid; place-items: center;
-  font-size: 2rem; color: var(--gold-light);
-  background: rgba(74,10,18,0); opacity: 0; transition: opacity 0.4s, background 0.4s;
-}
-.gallery__cell:hover img { transform: scale(1.1); }
-.gallery__cell:hover::after { opacity: 1; background: rgba(74,10,18,0.45); }
-
-/* Lightbox */
-.lightbox {
-  position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center;
-  background: rgba(30, 4, 8, 0.92); backdrop-filter: blur(6px);
-  opacity: 0; visibility: hidden; transition: opacity 0.4s var(--ease), visibility 0.4s;
-}
-.lightbox.is-open { opacity: 1; visibility: visible; }
-.lightbox__img {
-  max-width: 90vw; max-height: 82vh; border-radius: 8px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(212,175,55,0.4);
-  transform: scale(0.92); transition: transform 0.4s var(--ease);
-}
-.lightbox.is-open .lightbox__img { transform: scale(1); }
-.lightbox__btn {
-  position: absolute; color: var(--gold-light); font-size: 2.4rem; line-height: 1;
-  width: 56px; height: 56px; display: grid; place-items: center; transition: transform 0.3s, color 0.3s;
-}
-.lightbox__btn:hover { transform: scale(1.2); color: var(--white); }
-.lightbox__close { top: 18px; right: 18px; }
-.lightbox__prev { left: 10px; top: 50%; transform: translateY(-50%); }
-.lightbox__next { right: 10px; top: 50%; transform: translateY(-50%); }
-.lightbox__prev:hover, .lightbox__next:hover { transform: translateY(-50%) scale(1.2); }
-
-/* =====================================================================
    WISHES
    ===================================================================== */
 .wishes {
@@ -566,10 +505,6 @@ ul { list-style: none; }
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
-@media (max-width: 900px) {
-  .gallery__grid { grid-template-columns: repeat(2, 1fr); }
-}
-
 @media (max-width: 620px) {
   .timeline::before { left: 18px; }
   .timeline__item, .timeline__item:nth-child(odd), .timeline__item:nth-child(even) {
@@ -594,10 +529,6 @@ ul { list-style: none; }
     border-radius: 10px; padding: 10px 4px;
   }
   .choice { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 380px) {
-  .gallery__grid { grid-template-columns: 1fr; }
 }
 
 /* Reduced motion */
