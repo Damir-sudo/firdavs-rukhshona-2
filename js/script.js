@@ -14,12 +14,9 @@ const WEDDING_CONFIG = {
   timeLabel: "19:00",
 
   // ---- HERO ----
-  // Drop your photo at assets/images/hero-photo.jpg via GitHub.
-  // If the file is missing, an elegant animated fallback is shown.
-  // Once uploaded, the photo appears automatically — no code changes needed.
+  // Photo is loaded directly as the hero background.
   hero: {
     image: "assets/images/hero-photo.jpg",
-    fallback: "assets/images/hero.svg",
   },
 
   // ---- VENUE ----
@@ -29,10 +26,8 @@ const WEDDING_CONFIG = {
     query: "Fotima Sulton restaurant",
     coords: "", // optional "latitude,longitude" for a precise pin
     // Location URL is loaded from js/config.js (variable: locationUrl).
-    // Restaurant photo. Upload as assets/images/restaurant.jpg via GitHub.
-    // If missing, a beautiful SVG placeholder is shown automatically.
     photos: [
-      { src: "assets/images/restaurant.jpg", fallback: "assets/images/restaurant.svg", caption: "Ресторан Fotima Sulton" },
+      { src: "assets/images/restaurant.jpg", caption: "Ресторан Fotima Sulton" },
     ],
   },
 
@@ -51,13 +46,11 @@ const WEDDING_CONFIG = {
   ],
 
   // ---- OUR STORY ----
-  // Add as many moments as you like. Upload photos as story-1.jpg, etc.
+  // Only items with uploaded photos are shown.
   story: [
-    { date: "2021", title: "Знакомство", text: "Однажды наши пути пересеклись — и с этого момента всё изменилось.", src: "assets/images/story-1.jpg", fallback: "assets/images/story-1.svg" },
-    { date: "2022", title: "Первое свидание", text: "Первая прогулка, первый разговор до утра и понимание, что это — навсегда.", src: "assets/images/story-2.jpg", fallback: "assets/images/story-2.svg" },
-    { date: "2024", title: "Предложение", text: "Сердце замерло, прозвучало «да», и мир наполнился счастьем.", src: "assets/images/story-3.jpg", fallback: "assets/images/story-3.svg" },
-    { date: "2025", title: "Помолвка", text: "Мы соединили наши семьи и сделали первый шаг к новой жизни вместе.", src: "assets/images/story-4.jpg", fallback: "assets/images/story-4.svg" },
-    { date: "2026", title: "Наш день", text: "И вот настал день, которого мы так ждали. Будем счастливы разделить его с вами.", src: "assets/images/story-5.jpg", fallback: "assets/images/story-5.svg" },
+    { date: "2021", title: "Знакомство", text: "Однажды наши пути пересеклись — и с этого момента всё изменилось.", src: "assets/images/story-1.jpg" },
+    { date: "2022", title: "Первое свидание", text: "Первая прогулка, первый разговор до утра и понимание, что это — навсегда.", src: "assets/images/story-2.jpg" },
+    { date: "2024", title: "Предложение", text: "Сердце замерло, прозвучало «да», и мир наполнился счастьем.", src: "assets/images/story-3.jpg" },
   ],
 
   // Gallery images. Replace with real photos when available.
@@ -77,13 +70,6 @@ const WEDDING_CONFIG = {
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 const pad = (n) => String(n).padStart(2, "0");
-
-// Build an <img> markup string with a graceful fallback. If the primary
-// photo is missing, the browser swaps to the placeholder automatically.
-function imgTag(src, fallback, alt, extraAttr = "") {
-  const fb = fallback ? ` onerror="this.onerror=null;this.src='${fallback}';this.classList.add('is-placeholder')"` : "";
-  return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${fb} ${extraAttr}>`;
-}
 
 /* ---------------------------------------------------------------------
    Populate text content from config
@@ -105,19 +91,16 @@ function hydrateContent() {
 }
 
 /* ---------------------------------------------------------------------
-   Hero background photo (with elegant fallback)
+   Hero background photo
    --------------------------------------------------------------------- */
 function initHeroBackground() {
   const hero = $("#hero");
   if (!hero) return;
-  const { image, fallback } = WEDDING_CONFIG.hero;
+  const { image } = WEDDING_CONFIG.hero;
 
-  const apply = (url) => { hero.style.setProperty("--hero-image", `url("${url}")`); hero.classList.add("has-photo"); };
-
-  const probe = new Image();
-  probe.onload = () => apply(image);
-  probe.onerror = () => { if (fallback) apply(fallback); };
-  probe.src = image;
+  // Apply the uploaded photo directly as the hero background.
+  hero.style.setProperty("--hero-image", `url("${image}")`);
+  hero.classList.add("has-photo");
 }
 
 /* ---------------------------------------------------------------------
@@ -145,7 +128,9 @@ function buildStory() {
     return `
     <li class="story__item story__item--${side} reveal" data-reveal="${side === "left" ? "left" : "right"}" data-delay="60">
       <div class="story__media">
-        <figure class="story__photo">${imgTag(s.src, s.fallback, alt)}</figure>
+        <figure class="story__photo">
+          <img src="${s.src}" alt="${alt}" loading="lazy" decoding="async">
+        </figure>
       </div>
       <span class="story__node" aria-hidden="true"></span>
       <div class="story__content">
@@ -163,7 +148,7 @@ function buildVenuePhotos() {
   const photos = WEDDING_CONFIG.venue.photos || [];
   wrap.innerHTML = photos.map((p, i) => `
     <figure class="venue__photo reveal" data-reveal="up" data-delay="${i * 90}" data-index="${i}">
-      ${imgTag(p.src, p.fallback, `${WEDDING_CONFIG.venue.name} — ${p.caption || ""}`)}
+      <img src="${p.src}" alt="${WEDDING_CONFIG.venue.name} — ${p.caption || ""}" loading="lazy" decoding="async">
       ${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}
     </figure>`).join("");
 }

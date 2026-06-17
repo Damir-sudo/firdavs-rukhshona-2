@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750" preserveAspectRatio="xMidYMid slice">
-  <defs><linearGradient id="s4" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#c9a24a"/><stop offset="100%" stop-color="#9c7a2a"/></linearGradient></defs>
-  <rect width="1000" height="750" fill="url(#s4)"/>
-  <rect x="40" y="40" width="920" height="670" fill="none" stroke="#D4AF37" stroke-width="3" opacity="0.6"/>
-  <path d="M500 290 C540 330 575 350 575 405 C575 450 535 475 500 448 C465 475 425 450 425 405 C425 350 460 330 500 290 Z" fill="#D4AF37" opacity="0.55"/>
-  <text x="500" y="560" font-family="Georgia, serif" font-size="38" fill="#f6e7a8" text-anchor="middle" letter-spacing="3" opacity="0.85">Помолвка</text>
-  <text x="500" y="615" font-family="Georgia, serif" font-size="20" fill="#fff" text-anchor="middle" letter-spacing="5" opacity="0.5">UPLOAD story-4.jpg</text>
-</svg>
