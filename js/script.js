@@ -28,9 +28,9 @@ const WEDDING_CONFIG = {
     ],
   },
 
-  // Background music. Drop a file at this path to enable the player.
+  // Background music. Drop wedding-song.mp3 into assets/music/ to enable.
   music: {
-    src: "assets/music/background.mp3",
+    src: "assets/music/wedding-song.mp3",
     volume: 0.5,
   },
 
@@ -42,12 +42,15 @@ const WEDDING_CONFIG = {
     { time: "21:00", title: "Развлекательная программа" },
   ],
 
-  // ---- OUR STORY ----
-  // Only items with uploaded photos are shown.
-  story: [
-    { date: "2021", title: "Знакомство", text: "Однажды наши пути пересеклись — и с этого момента всё изменилось.", src: "assets/images/story-1.jpg" },
-    { date: "2022", title: "Первое свидание", text: "Первая прогулка, первый разговор до утра и понимание, что это — навсегда.", src: "assets/images/story-2.jpg" },
-    { date: "2024", title: "Предложение", text: "Сердце замерло, прозвучало «да», и мир наполнился счастьем.", src: "assets/images/story-3.jpg" },
+  // ---- OUR STORY (photo gallery) ----
+  // Photos that don't exist (404) are automatically hidden.
+  storyPhotos: [
+    "assets/images/story-1.jpg",
+    "assets/images/story-2.jpg",
+    "assets/images/story-3.jpg",
+    "assets/images/story-4.jpg",
+    "assets/images/story-5.jpg",
+    "assets/images/story-6.jpg",
   ],
 
 };
@@ -97,22 +100,14 @@ function buildTimeline() {
 function buildStory() {
   const list = $("#storyTimeline");
   if (!list) return;
-  list.innerHTML = WEDDING_CONFIG.story.map((s, i) => {
-    const side = i % 2 === 0 ? "left" : "right";
-    const alt = `${s.title} — ${WEDDING_CONFIG.groom} и ${WEDDING_CONFIG.bride}`;
+  list.innerHTML = WEDDING_CONFIG.storyPhotos.map((src, i) => {
+    const alt = `${WEDDING_CONFIG.groom} & ${WEDDING_CONFIG.bride} — фото ${i + 1}`;
     return `
-    <li class="story__item story__item--${side} reveal" data-reveal="${side === "left" ? "left" : "right"}" data-delay="60">
-      <div class="story__media">
-        <figure class="story__photo">
-          <img src="${s.src}" alt="${alt}" loading="lazy" decoding="async">
-        </figure>
-      </div>
-      <span class="story__node" aria-hidden="true"></span>
-      <div class="story__content">
-        ${s.date ? `<span class="story__date">${s.date}</span>` : ""}
-        <h3 class="story__heading">${s.title}</h3>
-        <p class="story__text">${s.text}</p>
-      </div>
+    <li class="gallery__item reveal" data-reveal="up" data-delay="${i * 80}">
+      <figure class="gallery__figure" data-lightbox="${i}">
+        <img src="${src}" alt="${alt}" loading="lazy" decoding="async"
+             onerror="this.closest('.gallery__item').style.display='none'">
+      </figure>
     </li>`;
   }).join("");
 }
@@ -401,6 +396,54 @@ function initRsvp() {
 }
 
 /* ---------------------------------------------------------------------
+   Lightbox for story gallery
+   --------------------------------------------------------------------- */
+function initLightbox() {
+  const overlay = document.createElement("div");
+  overlay.className = "lightbox";
+  overlay.innerHTML = `
+    <button class="lightbox__close" aria-label="Закрыть">&times;</button>
+    <button class="lightbox__prev" aria-label="Предыдущее фото">&#10094;</button>
+    <button class="lightbox__next" aria-label="Следующее фото">&#10095;</button>
+    <img class="lightbox__img" alt="" />`;
+  document.body.appendChild(overlay);
+
+  const img = overlay.querySelector(".lightbox__img");
+  const closeBtn = overlay.querySelector(".lightbox__close");
+  const prevBtn = overlay.querySelector(".lightbox__prev");
+  const nextBtn = overlay.querySelector(".lightbox__next");
+  let currentIndex = 0;
+
+  function getVisible() { return $$(".gallery__item").filter(el => el.style.display !== "none"); }
+
+  function open(idx) {
+    const items = getVisible();
+    if (idx < 0 || idx >= items.length) return;
+    currentIndex = idx;
+    img.src = items[currentIndex].querySelector("img").src;
+    overlay.classList.add("is-active");
+    document.body.style.overflow = "hidden";
+  }
+  function close() { overlay.classList.remove("is-active"); document.body.style.overflow = ""; img.src = ""; }
+  function nav(dir) { const items = getVisible(); currentIndex = (currentIndex + dir + items.length) % items.length; img.src = items[currentIndex].querySelector("img").src; }
+
+  document.addEventListener("click", (e) => {
+    const fig = e.target.closest(".gallery__figure");
+    if (fig) { const items = getVisible(); open(items.indexOf(fig.closest(".gallery__item"))); }
+  });
+  closeBtn.addEventListener("click", close);
+  prevBtn.addEventListener("click", () => nav(-1));
+  nextBtn.addEventListener("click", () => nav(1));
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!overlay.classList.contains("is-active")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") nav(-1);
+    if (e.key === "ArrowRight") nav(1);
+  });
+}
+
+/* ---------------------------------------------------------------------
    Preloader
    --------------------------------------------------------------------- */
 function initPreloader() {
@@ -425,6 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initParticles();
   initScrollFx();
   initMusic();
+  initLightbox();
   initRsvp();
   initPreloader();
 
