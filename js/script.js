@@ -57,6 +57,193 @@ const WEDDING_CONFIG = {
 };
 
 /* ---------------------------------------------------------------------
+   Translations
+   --------------------------------------------------------------------- */
+const translations = {
+  ru: {
+    heroPretitle: "С радостью приглашаем на нашу свадьбу",
+    heroSubtitle: "Wedding Day",
+    scrollDown: "Листайте вниз",
+    greetingTitle: "Дорогие родные и друзья!",
+    greetingText: "С огромной радостью приглашаем вас разделить вместе с нами один из самых счастливых дней нашей жизни. Ваше присутствие сделает этот праздник по-настоящему особенным.",
+    countdownEyebrow: "До торжества осталось",
+    days: "дней",
+    hours: "часов",
+    minutes: "минут",
+    seconds: "секунд",
+    countdownFinished: "Сегодня наш день! Спасибо, что вы с нами \u2764",
+    storyTitle: "Наша история",
+    programTitle: "Программа вечера",
+    venueTitle: "Место проведения",
+    routeBtn: "Построить маршрут",
+    wishesQuote: "Ваше присутствие станет для нас самым ценным подарком.",
+    rsvpTitle: "Подтверждение участия",
+    rsvpLead: "Пожалуйста, подтвердите своё присутствие до 1 июня 2026 года.",
+    labelName: "Имя и фамилия",
+    placeholderName: "Ваше имя",
+    labelPhone: "Телефон",
+    labelAttendance: "Будете присутствовать?",
+    attendYes: "Да, обязательно буду",
+    attendNo: "К сожалению, не смогу",
+    labelGuests: "Количество гостей",
+    guest1: "1 человек",
+    guest2: "2 человека",
+    guest3: "3 человека",
+    guest4: "4 человека",
+    submitBtn: "Подтвердить участие",
+    rsvpSuccess: "Спасибо! Ваш ответ принят. Будем рады встрече \u2764",
+    rsvpDeclined: "Спасибо за ответ! Будем скучать \u2764",
+    footerDate: "23 июня 2026 \u00B7 Fotima Sulton",
+    footerCredit: "С любовью ждём вас на нашем празднике",
+    musicOn: "Music On",
+    musicOff: "Music Off",
+    errorName: "Пожалуйста, укажите имя",
+    errorPhone: "Введите корректный телефон",
+    errorAttendance: "Выберите вариант",
+    venueCaption: "Ресторан Fotima Sulton",
+  },
+  en: {
+    heroPretitle: "We joyfully invite you to our wedding",
+    heroSubtitle: "Wedding Day",
+    scrollDown: "Scroll down",
+    greetingTitle: "Dear Family and Friends!",
+    greetingText: "We are thrilled to invite you to share one of the happiest days of our lives. Your presence will make this celebration truly special.",
+    countdownEyebrow: "Until the celebration",
+    days: "days",
+    hours: "hours",
+    minutes: "minutes",
+    seconds: "seconds",
+    countdownFinished: "Today is our day! Thank you for being with us \u2764",
+    storyTitle: "Our Story",
+    programTitle: "Evening Program",
+    venueTitle: "Venue",
+    routeBtn: "Get Directions",
+    wishesQuote: "Your presence will be the most precious gift for us.",
+    rsvpTitle: "Confirm Attendance",
+    rsvpLead: "Please confirm your attendance by June 1, 2026.",
+    labelName: "Full Name",
+    placeholderName: "Your name",
+    labelPhone: "Phone",
+    labelAttendance: "Will you attend?",
+    attendYes: "Yes, I will be there",
+    attendNo: "Unfortunately, I cannot",
+    labelGuests: "Number of Guests",
+    guest1: "1 person",
+    guest2: "2 people",
+    guest3: "3 people",
+    guest4: "4 people",
+    submitBtn: "Confirm Attendance",
+    rsvpSuccess: "Thank you! Your response has been received. We look forward to seeing you \u2764",
+    rsvpDeclined: "Thank you for your response! We will miss you \u2764",
+    footerDate: "23 June 2026 \u00B7 Fotima Sulton",
+    footerCredit: "With love, we look forward to celebrating with you",
+    musicOn: "Music On",
+    musicOff: "Music Off",
+    errorName: "Please enter your name",
+    errorPhone: "Please enter a valid phone number",
+    errorAttendance: "Please select an option",
+    venueCaption: "Fotima Sulton Restaurant",
+  },
+};
+
+// Program translations (dynamic content)
+const programTranslations = {
+  ru: [
+    { time: "19:00", title: "Сбор гостей" },
+    { time: "19:30", title: "Торжественная часть" },
+    { time: "21:00", title: "Первый свадебный вальс молодожёнов" },
+    { time: "22:00", title: "Торжественное разрезание свадебного торта и продолжение праздничной программы" },
+  ],
+  en: [
+    { time: "19:00", title: "Guest Arrival" },
+    { time: "19:30", title: "Ceremony" },
+    { time: "21:00", title: "First Wedding Dance" },
+    { time: "22:00", title: "Cake Cutting and Continuation of Festivities" },
+  ],
+};
+
+let currentLang = localStorage.getItem("wedding_lang") || "ru";
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("wedding_lang", lang);
+
+  const t = translations[lang];
+  if (!t) return;
+
+  // Update all elements with data-i18n attribute
+  document.querySelectorAll("[data-i18n]").forEach(function(el) {
+    var key = el.getAttribute("data-i18n");
+    if (t[key] !== undefined) {
+      el.textContent = t[key];
+    }
+  });
+
+  // Update placeholders
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
+    var key = el.getAttribute("data-i18n-placeholder");
+    if (t[key] !== undefined) {
+      el.placeholder = t[key];
+    }
+  });
+
+  // Update the music toggle label based on playing state
+  var musicBtn = document.getElementById("musicToggle");
+  if (musicBtn) {
+    var label = musicBtn.querySelector(".music-toggle__label");
+    if (label) {
+      var isPlaying = musicBtn.classList.contains("is-playing");
+      label.textContent = isPlaying ? t.musicOn : t.musicOff;
+    }
+  }
+
+  // Rebuild timeline with correct language
+  var timelineEl = document.getElementById("timeline");
+  if (timelineEl) {
+    var items = programTranslations[lang] || programTranslations.ru;
+    timelineEl.innerHTML = items.map(function(item, i) {
+      return '<li class="timeline__item reveal is-visible" data-reveal="' + (i % 2 === 0 ? "left" : "right") + '" data-delay="' + (i * 80) + '">' +
+        '<span class="timeline__dot" aria-hidden="true"></span>' +
+        '<div class="timeline__card">' +
+        '<span class="timeline__time">' + item.time + '</span>' +
+        '<span class="timeline__title">' + item.title + '</span>' +
+        '</div></li>';
+    }).join("");
+  }
+
+  // Update venue photo captions
+  var venuePhotos = document.querySelectorAll(".venue__photo figcaption");
+  venuePhotos.forEach(function(el) {
+    el.textContent = t.venueCaption;
+  });
+
+  // Update html lang attribute
+  document.documentElement.lang = lang === "ru" ? "ru" : "en";
+
+  // Update active state on switcher buttons
+  document.querySelectorAll(".lang-switcher__btn").forEach(function(btn) {
+    btn.classList.toggle("is-active", btn.getAttribute("data-lang") === lang);
+  });
+}
+
+function initLangSwitcher() {
+  var switcher = document.getElementById("langSwitcher");
+  if (!switcher) return;
+
+  switcher.addEventListener("click", function(e) {
+    var btn = e.target.closest(".lang-switcher__btn");
+    if (!btn) return;
+    var lang = btn.getAttribute("data-lang");
+    if (lang && lang !== currentLang) {
+      applyLanguage(lang);
+    }
+  });
+
+  // Apply saved language on load
+  applyLanguage(currentLang);
+}
+
+/* ---------------------------------------------------------------------
    Helpers
    --------------------------------------------------------------------- */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -309,7 +496,12 @@ function initMusic() {
 
   let playing = false;
 
-  const setLabel = (on) => { if (label) label.textContent = on ? "Music On" : "Music Off"; };
+  const setLabel = (on) => {
+    if (label) {
+      var t = translations[currentLang] || translations.ru;
+      label.textContent = on ? t.musicOn : t.musicOff;
+    }
+  };
 
   const play = () => {
     audio.play().then(() => {
@@ -359,9 +551,9 @@ function initRsvp() {
     const phone = form.phone.value.trim();
     const attendance = form.attendance.value;
 
-    if (name.length < 2) { setError("guestName", "Пожалуйста, укажите имя"); valid = false; }
-    if (phone.replace(/\D/g, "").length < 7) { setError("guestPhone", "Введите корректный телефон"); valid = false; }
-    if (!attendance) { setError("attendance", "Выберите вариант"); valid = false; }
+    if (name.length < 2) { setError("guestName", (translations[currentLang] || translations.ru).errorName); valid = false; }
+    if (phone.replace(/\D/g, "").length < 7) { setError("guestPhone", (translations[currentLang] || translations.ru).errorPhone); valid = false; }
+    if (!attendance) { setError("attendance", (translations[currentLang] || translations.ru).errorAttendance); valid = false; }
     if (!valid) return;
 
     const data = {
@@ -384,9 +576,8 @@ function initRsvp() {
     form.querySelectorAll("input, select, button").forEach((el) => (el.disabled = true));
     if (success) {
       success.hidden = false;
-      success.textContent = attendance === "yes"
-        ? "Спасибо! Ваш ответ принят. Будем рады встрече \u2764"
-        : "Спасибо за ответ! Будем скучать \u2764";
+      var t = translations[currentLang] || translations.ru;
+      success.textContent = attendance === "yes" ? t.rsvpSuccess : t.rsvpDeclined;
     }
   });
 }
@@ -470,4 +661,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Reveal observers run last so they pick up dynamically built nodes.
   observeNewReveals();
+
+  // Language switcher — apply saved language after DOM is ready.
+  initLangSwitcher();
 });
